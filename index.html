@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="nb"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Oppgaver: Arbeidserfaring og kvalifikasjoner</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f1f5f9;--fg:#12324a;--mut:#64748b;--card:#fff;--line:#d5dee7;--acc:#e2711d;--teal:#0f7f7f;--ok:#15803d;--bad:#dc2626;--chip:#e2e8f0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1b26;--fg:#e8f0f6;--mut:#94a3b8;--card:#17303f;--line:#2a4657;--chip:#1f3a4b;--ok:#4ade80;--bad:#f87171}}
+:root[data-theme="dark"]{--bg:#0d1b26;--fg:#e8f0f6;--mut:#94a3b8;--card:#17303f;--line:#2a4657;--chip:#1f3a4b;--ok:#4ade80;--bad:#f87171}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5;padding:20px 14px 60px}
+main{max-width:720px;margin:0 auto}
+h1{font-size:1.5rem;margin:4px 0}
+.sub{color:var(--mut);margin:0 0 16px}
+.tabs{display:flex;gap:8px;margin-bottom:16px}
+.tab{flex:1;border:0;padding:12px;border-radius:14px;font-weight:700;font-size:.95rem;cursor:pointer;background:var(--chip);color:var(--fg)}
+.tab.on{color:#fff;background:var(--acc)}.tab.on.k{background:var(--teal)}
+.task{background:var(--card);border-radius:20px;padding:18px 20px;margin-bottom:14px;box-shadow:0 8px 24px -14px rgba(18,50,74,.35)}
+.task h2{font-size:1.05rem;margin:0 0 8px;display:flex;gap:10px;align-items:center}
+.num{background:var(--acc);color:#fff;border-radius:99px;min-width:28px;height:28px;display:grid;place-items:center;font-size:.85rem}
+.k .num{background:var(--teal)}
+.intro{color:var(--mut);margin:0 0 10px;font-size:.95rem}
+.box{background:var(--bg);border-radius:12px;padding:8px 14px;margin:0 0 10px;font-size:.95rem}
+.item{margin:10px 0}
+.pills{display:inline-flex;flex-wrap:wrap;gap:6px;vertical-align:middle;margin:2px 4px}
+.pill{border:2px solid var(--line);background:transparent;color:var(--fg);padding:5px 13px;border-radius:99px;cursor:pointer;font:inherit;font-size:.9rem}
+.pill.on{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+.pills.ok .pill.on{background:var(--ok);border-color:var(--ok);color:#fff}
+.pills.bad .pill.on{background:var(--bad);border-color:var(--bad);color:#fff}
+input.t,textarea{font:inherit;color:var(--fg);background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:6px 10px;max-width:100%}
+input.t{width:190px}input.w{width:100%;display:block;margin-top:4px}
+textarea{width:100%;min-height:90px;margin-top:6px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+.bank{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.bank span{background:var(--chip);padding:3px 12px;border-radius:99px;font-size:.9rem;font-weight:600}
+.scr{font-weight:600}
+.bar{position:sticky;bottom:10px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;background:var(--card);padding:10px;border-radius:18px;box-shadow:0 10px 30px -8px rgba(0,0,0,.35);margin-top:16px}
+.btn{border:0;padding:10px 16px;border-radius:12px;font-weight:700;cursor:pointer;background:var(--chip);color:var(--fg);font-size:.9rem}
+.btn.p{background:var(--acc);color:#fff}
+#score{font-weight:700;padding:0 8px}
+@media print{.tabs,.bar{display:none}.task{box-shadow:none;border:1px solid #bbb;break-inside:avoid}body{background:#fff;color:#000}.pill.on{background:#ddd;color:#000}}
+</style></head><body><main>
+<h1>Oppgaver: arbeidserfaring og kvalifikasjoner</h1>
+<p class="sub">Nivå A1/A2 · Svar, trykk «Sjekk svar» og se hvor mange du har riktig.</p>
+<div class="tabs"><button class="tab on" id="ta">Arbeidserfaring</button><button class="tab k" id="tk">Kvalifikasjoner</button></div>
+<div id="root"></div>
+<div class="bar"><span id="score"></span><button class="btn p" id="chk">Sjekk svar</button><button class="btn" id="fas">Vis fasit</button><button class="btn" id="rst">Nullstill</button><button class="btn" onclick="window.print()">Skriv ut</button></div>
+</main>
+<script>
+var TF=["sant","usant"];
+function tf(a){return a.map(function(x){return{q:x[0],o:TF,a:x[1]}})}
+function fill(a){return a.map(function(x){return{q:x[0],a:x[1]}})}
+function mc(q,o,i){return[{q:q,o:o,a:o[i]}]}
+function mt(a,ans){return a.map(function(x,i){return{q:x,o:["a","b","c","d"],a:ans[i]}})}
+function wd(a){return a.map(function(x){return{q:x[0],a:x[1],w:1}})}
+var L=["Sett ordene i riktig rekkefølge og skriv setningen."];
+var DATA={
+a:[
+{t:"Sant eller usant?",i:tf([["Erfaring betyr at du har gjort lignende oppgaver før.","sant"],["Du kan bare få erfaring fra en vanlig jobb.","usant"],["Praksis er også arbeidserfaring.","sant"],["Frivillig arbeid er ikke erfaring.","usant"]])},
+{t:"Fyll inn riktig ord",n:"erfaring · praksis · ansatt · arbeidsoppgaver",b:1,i:fill([["Samuel hadde {} i en matbutikk i ett år.","praksis"],["Etter praksis ble han {} i butikken.","ansatt"],["Nå har han tre års {} fra matbutikk.","erfaring"],["Han har mange {} på jobben.","arbeidsoppgaver"]])},
+{t:"Velg riktig svar",i:mc("Hva gjør en arbeidsgiver?",["Hun søker jobb.","Hun ansetter folk.","Hun kjøper varer."],1)},
+{t:"Sett i riktig rekkefølge",n:"Hvordan fikk Samuel erfaring? Velg 1, 2 eller 3.",i:[{q:"Han ble ansatt i butikken.",o:["1","2","3"],a:"2"},{q:"Han har jobbet der i to år.",o:["1","2","3"],a:"3"},{q:"Han hadde praksis i en annen butikk.",o:["1","2","3"],a:"1"}]},
+{t:"Koble arbeidsoppgave og forklaring",box:["a) Du legger varer på riktig plass.","b) Du tar betalt av kunden.","c) Du ber om nye varer.","d) Du stenger butikken."],i:mt(["1. å sitte i kassa","2. å sette varer i hyllene","3. å bestille varer","4. å låse døra"],["b","a","c","d"])},
+{t:"Morgen eller kveld?",n:"Hva gjør du helst når? Det finnes ikke ett riktig svar. Snakk sammen.",i:["å rydde aviser","å tømme flaskeautomaten","å sette på alarmen","å ta imot varer","å låse døra"].map(function(x){return{q:x,o:["morgen","kveld"]}})},
+{t:"Lag setninger",n:L[0],i:wd([["har / tre års / Samuel / erfaring","Samuel har tre års erfaring"],["i butikken / Han / hjelper / kunder","Han hjelper kunder i butikken"],["jobb / Jeg / før / har / gjort / denne","Jeg har gjort denne jobben før|Denne jobben har jeg gjort før"]])},
+{t:"Hvem har erfaring?",n:"Anna har vært i praksis i to måneder. Omar har jobbet i butikk i fire år. Lise har aldri jobbet i butikk.",i:mc("Hvem har mest erfaring med butikk?",["Anna","Omar","Lise"],1)},
+{t:"Snakk sammen to og to",open:["Hvilke arbeidsoppgaver har du hatt?","Hvor har du fått erfaring? (jobb, praksis, frivillig arbeid)","Hva vil du gjøre på en ny jobb?"]},
+{t:"Rollespill: jobbintervju",open:["Person A er arbeidsgiver. Person B søker jobb i en butikk.","Arbeidsgiveren spør: «Hvilken erfaring har du?» og «Hva har du gjort på jobben?»","Søkeren svarer med minst tre setninger. Skriv svaret her:"]}],
+k:[
+{t:"Koble ord og forklaring",box:["a) Et bevis på at du er fagarbeider","b) Hvordan du er som person","c) Noe du kan eller har lært","d) Skole, fagbrev og kurs"],i:mt(["1. en kvalifikasjon","2. et fagbrev","3. en egenskap","4. utdanning"],["c","a","b","d"])},
+{t:"Fyll inn riktig ord",n:"kvalifisert · førerkort · norsk · datakunnskaper",b:1,i:fill([["En bussjåfør må ha {}.","førerkort"],["En kundebehandler må snakke godt {}.","norsk"],["Jeg kan bruke data. Jeg har gode {}.","datakunnskaper"],["Du har alt jobben spør etter. Du er {} til jobben.","kvalifisert"]])},
+{t:"Hvilken gruppe hører ordet til?",i:[["å ha fagbrev","utdanning"],["å snakke og skrive norsk","språk"],["å være tålmodig","egenskaper"],["å kunne bruke data","datakunnskaper"],["å ta et kurs","utdanning"]].map(function(x){return{q:x[0],o:["utdanning","språk","datakunnskaper","egenskaper"],a:x[1]}})},
+{t:"Hvordan må de være?",box:["a) serviceinnstilt","b) omsorgsfull","c) nøyaktig og effektiv","d) tålmodig"],i:mt(["1. helsefagarbeider","2. baker","3. kundebehandler","4. lærer"],["b","c","a","d"])},
+{t:"Velg riktig svar",i:mc("Hva betyr «å være ansvarsbevisst»?",["Du gjør det du skal gjøre.","Du liker å snakke mye.","Du står opp sent."],0)},
+{t:"Sant eller usant?",i:tf([["En elektriker trenger fagbrev.","sant"],["Personlige egenskaper er ikke en kvalifikasjon.","usant"],["Arbeidserfaring er en kvalifikasjon.","sant"],["Alle jobber spør etter de samme kvalifikasjonene.","usant"]])},
+{t:"Lag setninger",n:L[0],i:wd([["må / En helsefagarbeider / omsorgsfull / være","En helsefagarbeider må være omsorgsfull"],["godt norsk / snakke / Jeg / kan","Jeg kan snakke godt norsk"],["En baker / tidlig / står opp","En baker står opp tidlig"]])},
+{t:"Hvem er det?",n:"Skriv yrket.",i:fill([["Jeg hjelper eldre mennesker. Jeg gir god pleie og tar blodprøver. → {}","helsefagarbeider"],["Jeg jobber med strøm. Jeg har fagbrev. → {}","elektriker"],["Jeg lager brød. Jeg står opp tidlig. → {}","baker"]])},
+{t:"Snakk sammen to og to",n:"Velg to yrker: bussjåfør, renholder, bilmekaniker, kokk, selger.",open:["Hva må de kunne?","Hva må de ha lært på skolen?","Hvordan må de være?"]},
+{t:"Skriv om deg selv",open:["Skriv tre setninger med disse ordene: kvalifikasjon, egenskap, arbeidserfaring.","Eksempel: «Jeg har fagbrev. Det er en kvalifikasjon.»"]}]};
+var cur="a",$=function(i){return document.getElementById(i)};
+function E(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function norm(s){return String(s).toLowerCase().replace(/[.,!?«»]/g,"").replace(/^(en|et)\s+/,"").replace(/\s+/g," ").trim()}
+function ctrl(it){
+ if(it.o){var w=E("span","pills");it.o.forEach(function(o){var b=E("button","pill",o);b.type="button";b.onclick=function(){[].forEach.call(w.children,function(c){c.classList.remove("on")});b.classList.add("on");w.v=o;w.className="pills"};w.appendChild(b)});w.a=it.a;return w}
+ var i=E("input","t"+(it.w?" w":""));i.type="text";i.autocomplete="off";i.a=it.a;i.oninput=function(){i.classList.remove("ok","bad")};return i}
+function val(c){return c.v!==undefined?c.v:(c.value||"")}
+function setv(c,v){if(c.classList.contains("pills")){c.v=v;[].forEach.call(c.children,function(b){b.classList.toggle("on",b.textContent===v)})}else c.value=v}
+function render(){
+ var r=$("root");r.innerHTML="";
+ DATA[cur].forEach(function(t,n){
+  var d=E("section","task "+cur);var h=E("h2");h.appendChild(E("span","num",n+1));h.appendChild(E("span","",t.t));d.appendChild(h);
+  if(t.n){var p=E("p","intro",t.n);if(t.b){p=E("div","bank");t.n.split(" · ").forEach(function(w){p.appendChild(E("span","",w))})}d.appendChild(p)}
+  if(t.box){var b=E("div","box");t.box.forEach(function(x){b.appendChild(E("div","",x))});d.appendChild(b)}
+  (t.i||[]).forEach(function(it){
+   var row=E("div","item"),c=ctrl(it);c.dataset.chk=it.a?1:0;
+   var parts=it.q.split("{}");
+   if(parts.length>1){row.appendChild(document.createTextNode(parts[0]));row.appendChild(c);row.appendChild(document.createTextNode(parts[1]))}
+   else{row.appendChild(E("span",it.w?"scr":"",it.q+" "));if(it.w)row.appendChild(document.createElement("br"));row.appendChild(c)}
+   d.appendChild(row)});
+  (t.open||[]).forEach(function(q){d.appendChild(E("p","intro",q))});
+  if(t.open)d.appendChild(E("textarea"));
+  r.appendChild(d)});
+ $("score").textContent=""}
+function all(){return[].slice.call(document.querySelectorAll("[data-chk='1']"))}
+function check(){var ok=0,tot=0;
+ all().forEach(function(c){tot++;var v=val(c);if(!v)return;
+  var good=c.a.split("|").some(function(a){return norm(a)===norm(v)});
+  if(good)ok++;c.classList.remove("ok","bad");c.classList.add(good?"ok":"bad")});
+ $("score").textContent=ok+" av "+tot+" riktige"+(ok===tot?" 🎉":"")}
+$("chk").onclick=check;
+$("fas").onclick=function(){all().forEach(function(c){setv(c,c.a.split("|")[0]);c.classList.remove("bad");c.classList.add("ok")});check()};
+$("rst").onclick=render;
+function tab(k){cur=k;$("ta").classList.toggle("on",k==="a");$("tk").classList.toggle("on",k==="k");render()}
+$("ta").onclick=function(){tab("a")};$("tk").onclick=function(){tab("k")};
+render();
+</script></body></html>   
